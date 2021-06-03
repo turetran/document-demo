@@ -6,7 +6,10 @@ export default async (req, res) => {
     let key = body.key
     let title = body.title
 
-    firebase.database().ref('/doc/shh/content').update({[key]: {content: body.content, title, key}})
+    firebase.database().ref('/doc/shh/content').update({[key]: {content: body.content, title, key}}, error => {
+        if (error) console.log("updateshh", error)
+        else console.log("updateshh", "success")
+    })
     
     return res.status(200).json({res:'OK'})
 }
