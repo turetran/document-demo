@@ -72,7 +72,7 @@ function Content({ data, id, title }) {
                 body: JSON.stringify({ content, key: id, title })
             })
                 .then(res => {
-                    console.log("content update status", res.status)
+                    //console.log("content update status", res.status)
                     return res.json()
                 })
                 .then(data => {

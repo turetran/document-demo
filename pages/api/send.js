@@ -16,7 +16,6 @@ export default async (req, res) => {
 
 
     if (body.kind == "new") { // create new
-
         // check not duplicate title
         let node = (await firebase.database().ref("/doc/shh/titles").orderByChild("title").equalTo(body.title).once("value")).val()
         if (node) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,7 +22,11 @@ import useWindowSize from "components/Hooks/useWindowSize.js";
 
 import styles from "assets/jss/nextjs-material-dashboard/components/headerLinksStyle.js";
 
+import firebase from "../Backend/Firebase"
+import Link from "next/link"
+
 export default function AdminNavbarLinks() {
+  const [user, setUser] = useState(null)
   const size = useWindowSize();
   const useStyles = makeStyles(styles);
   const classes = useStyles();
@@ -48,6 +52,21 @@ export default function AdminNavbarLinks() {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
+
+  firebase.auth().onAuthStateChanged((userData) => {
+    if (userData) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      //var uid = userData.uid;
+      setUser(userData)
+      // ...
+    } else {
+      // User is signed out
+      // ...
+      setUser(null)
+    }
+  });
+
   return (
     <div>
       <div className={classes.searchWrapper}>
@@ -156,70 +175,95 @@ export default function AdminNavbarLinks() {
           )}
         </Poppers>
       </div>
-      <div className={classes.manager}>
-        <Button
-          color={size.width > 959 ? "transparent" : "white"}
-          justIcon={size.width > 959}
-          simple={!(size.width > 959)}
-          aria-owns={openProfile ? "profile-menu-list-grow" : null}
-          aria-haspopup="true"
-          onClick={handleClickProfile}
-          className={classes.buttonLink}
-        >
-          <Person className={classes.icons} />
-          <Hidden mdUp implementation="css">
-            <p className={classes.linkText}>Profile</p>
-          </Hidden>
-        </Button>
-        <Poppers
-          open={Boolean(openProfile)}
-          anchorEl={openProfile}
-          transition
-          disablePortal
-          className={
-            classNames({ [classes.popperClose]: !openProfile }) +
-            " " +
-            classes.popperNav
-          }
-        >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              id="profile-menu-list-grow"
-              style={{
-                transformOrigin:
-                  placement === "bottom" ? "center top" : "center bottom",
-              }}
-            >
-              <Paper>
-                <ClickAwayListener onClickAway={handleCloseProfile}>
-                  <MenuList role="menu">
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
-                      Profile
+      {user && console.log("user", user)}
+      { !user ?
+        <Link href="/login"><button>Log in</button></Link>
+        :
+        <div className={classes.manager}>
+          <Button
+            color={size.width > 959 ? "transparent" : "white"}
+            justIcon={size.width > 959}
+            simple={!(size.width > 959)}
+            aria-owns={openProfile ? "profile-menu-list-grow" : null}
+            aria-haspopup="true"
+            onClick={handleClickProfile}
+            className={classes.buttonLink}
+          >
+            <Person className={classes.icons} />
+            <Hidden mdUp implementation="css">
+              <p className={classes.linkText}>Profile</p>
+            </Hidden>
+          </Button>
+          <Poppers
+            open={Boolean(openProfile)}
+            anchorEl={openProfile}
+            transition
+            disablePortal
+            className={
+              classNames({ [classes.popperClose]: !openProfile }) +
+              " " +
+              classes.popperNav
+            }
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                id="profile-menu-list-grow"
+                style={{
+                  transformOrigin:
+                    placement === "bottom" ? "center top" : "center bottom",
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleCloseProfile}>
+                    <MenuList role="menu">
+
+                      <MenuItem
+                        onClick={handleCloseProfile}
+                        className={classes.dropdownItem}
+                      >
+                        Name: {user.displayName}
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
-                      Settings
+
+                      <MenuItem
+                        onClick={handleCloseProfile}
+                        className={classes.dropdownItem}
+                      >
+                        Email: {user.email}
                     </MenuItem>
-                    <Divider light />
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
-                      Logout
+                      <MenuItem
+                        onClick={handleCloseProfile}
+                        className={classes.dropdownItem}
+                      >
+                        Profile
                     </MenuItem>
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Poppers>
-      </div>
+                      <MenuItem
+                        onClick={handleCloseProfile}
+                        className={classes.dropdownItem}
+                      >
+                        Settings
+                    </MenuItem>
+                      <Divider light />
+                      <MenuItem
+                        onClick={() => {
+                          firebase.auth().signOut().then(() => {
+                            // Sign-out successful.
+                          }).catch((error) => {
+                            // An error happened.
+                          });
+                        }}
+                        className={classes.dropdownItem}
+                      >
+                        Logout
+                    </MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Poppers>
+        </div>
+      }
     </div>
   );
 }

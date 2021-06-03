@@ -107,6 +107,7 @@ export default class MyApp extends App {
           <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
           <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
           <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+          <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-auth.js"></script>
           <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/css/suneditor.min.css" rel="stylesheet"></link>
         </Head>
         <Layout>
