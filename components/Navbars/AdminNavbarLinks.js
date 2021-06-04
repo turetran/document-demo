@@ -24,8 +24,11 @@ import styles from "assets/jss/nextjs-material-dashboard/components/headerLinksS
 
 import firebase from "../Backend/Firebase"
 import Link from "next/link"
+import { useRouter } from 'next/router'
 
 export default function AdminNavbarLinks() {
+  const route = useRouter()
+
   const [user, setUser] = useState(null)
   const size = useWindowSize();
   const useStyles = makeStyles(styles);
@@ -175,7 +178,6 @@ export default function AdminNavbarLinks() {
           )}
         </Poppers>
       </div>
-      {user && console.log("user", user)}
       { !user ?
         <Link href="/login"><button>Log in</button></Link>
         :
@@ -191,8 +193,9 @@ export default function AdminNavbarLinks() {
           >
             <Person className={classes.icons} />
             <Hidden mdUp implementation="css">
-              <p className={classes.linkText}>Profile</p>
+              <p className={classes.linkText}></p>
             </Hidden>
+            <p className={classes.linkText}>{user.displayName}</p>
           </Button>
           <Poppers
             open={Boolean(openProfile)}
@@ -232,7 +235,7 @@ export default function AdminNavbarLinks() {
                         Email: {user.email}
                     </MenuItem>
                       <MenuItem
-                        onClick={handleCloseProfile}
+                        onClick={() => route.push("/profile")}
                         className={classes.dropdownItem}
                       >
                         Profile
