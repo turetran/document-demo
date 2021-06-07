@@ -10,53 +10,9 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 function ShhDetail({ data, title }) {
     return <div>
         <div style={{textAlign: "center", fontSize: "24px", marginBottom: "30px"}}><strong>{title}</strong></div>
-        <SunEditor 
-            defaultValue={data}
-            hideToolbar={true}
-            disable={true}
-
-            setOptions={{
-                showPathLabel: false,
-                minHeight: "50vh",
-                maxHeight: "50vh",
-                placeholder: "Enter your text here!!!",
-                buttonList: [
-                    ["undo", "redo"],
-                    ["font", "fontSize", "formatBlock"],
-                    ["paragraphStyle"],
-                    [
-                        "bold",
-                        "underline",
-                        "italic",
-                        "strike",
-                        "subscript",
-                        "superscript"
-                    ],
-                    ["fontColor", "hiliteColor"],
-                    ["removeFormat"],
-                    "/", // Line break
-                    ["outdent", "indent"],
-                    ["align", "horizontalRule", "list", "lineHeight"],
-                    ["table", "link", "image"]
-                ],
-                formats: ["p", "div", "h1", "h2", "h3", "h4", "h5", "h6"],
-                font: [
-                    "Arial",
-                    "Calibri",
-                    "Comic Sans",
-                    "Courier",
-                    "Garamond",
-                    "Georgia",
-                    "Impact",
-                    "Lucida Console",
-                    "Palatino Linotype",
-                    "Segoe UI",
-                    "Tahoma",
-                    "Times New Roman",
-                    "Trebuchet MS"
-                ]
-            }}
-        />
+        <div style={{maxWidth:"900px", border: "0px solid red", margin: "auto"}}
+            dangerouslySetInnerHTML={{__html: data}} >
+        </div>
     </div>
 }
 
