@@ -12,38 +12,37 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const styles = {
     cardCategoryWhite: {
-      "&,& a,& a:hover,& a:focus": {
-        color: "rgba(255,255,255,.62)",
-        margin: "0",
-        fontSize: "14px",
-        marginTop: "0",
-        marginBottom: "0",
-      },
-      "& a,& a:hover,& a:focus": {
-        color: "#FFFFFF",
-      },
+        "&,& a,& a:hover,& a:focus": {
+            color: "rgba(255,255,255,.62)",
+            margin: "0",
+            fontSize: "14px",
+            marginTop: "0",
+            marginBottom: "0",
+        },
+        "& a,& a:hover,& a:focus": {
+            color: "#FFFFFF",
+        },
     },
     cardTitleWhite: {
-      color: "#FFFFFF",
-      marginTop: "0px",
-      minHeight: "auto",
-      fontWeight: "300",
-      fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-      marginBottom: "3px",
-      textDecoration: "none",
-      "& small": {
-        color: "#777",
-        fontSize: "65%",
-        fontWeight: "400",
-        lineHeight: "1",
-      },
+        color: "#FFFFFF",
+        marginTop: "0px",
+        minHeight: "auto",
+        fontWeight: "300",
+        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+        marginBottom: "3px",
+        textDecoration: "none",
+        "& small": {
+            color: "#777",
+            fontSize: "65%",
+            fontWeight: "400",
+            lineHeight: "1",
+        },
     },
-  };
+};
 
 function SHHEdit({ data, atts }) {
     const useStyles = makeStyles(styles);
     const classes = useStyles();
-
     return <>
         <button><Link href="/admin/shhedit/sieuhinhhoc">Thêm chủ đề</Link></button>
         <GridContainer>
@@ -58,14 +57,14 @@ function SHHEdit({ data, atts }) {
                     <CardBody>
                         <Table
                             tableHeaderColor="info"
-                            tableHead={["Số thứ tự", "Tựa đề", "Mô tả", "Vị trí", "Tạo bởi",""]}
+                            tableHead={["Số thứ tự", "Tựa đề", "Mô tả", "Vị trí", "Tạo bởi", ""]}
                             tableData={atts.map((att, key) => {
-                                return [(key+1).toString(), 
-                                    <Link href={"/admin/shhedit/content?id=" + data[att].key + "&ori=shh"} key={"t"+key}>{data[att].title}</Link>,
-                                    data[att].descr,
-                                    data[att].order.toString(),
+                                return [(key + 1).toString(),
+                                <Link href={"/admin/shhedit/content?id=" + data[att].key + "&ori=shh"} key={"t" + key}>{data[att].title}</Link>,
+                                data[att].descr,
+                                data[att].order.toString(),
                                     "",
-                                    <Link href={"/admin/shhedit/sieuhinhhoc?id=" + data[att].key}><button>Chỉnh sửa</button></Link>
+                                <Link href={"/admin/shhedit/sieuhinhhoc?id=" + data[att].key}><button>Chỉnh sửa</button></Link>
                                 ]
                             })}
                         />
@@ -81,7 +80,7 @@ export async function getServerSideProps(context) {
     data = (await firebase.database().ref('/doc/shh/titles').once('value')).val()
     delete data.order
     let atts = Object.keys(data)
-    atts.sort((a,b) => Number(data[a].order) - Number(data[b].order))
+    atts.sort((a, b) => Number(data[a].order) - Number(data[b].order))
     return {
         props: { data, atts }, // will be passed to the page component as props
     }

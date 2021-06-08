@@ -4,18 +4,24 @@ import firebase from "../../../components/Backend/Firebase"
 import dynamic from "next/dynamic";
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 
+import {useState} from 'react'
+
 const SunEditor = dynamic(() => import("suneditor-react"), {
     ssr: false,
 });
 
 function Content({ data, id, title }) {
+    const [notif, setNotif] = useState("")
+    const [color, setColor] = useState("blue")
+    let user = firebase.auth().currentUser || {}
+
     return <div>
         <div>{title}</div>
+        <div style={{color}}>{notif}</div>
         <br />
 
         <SunEditor defaultValue={data}
             onChange={(content) => data = content}
-
             setOptions={{
                 showPathLabel: true,
                 minHeight: "50vh",
@@ -67,7 +73,10 @@ function Content({ data, id, title }) {
             fetch("/api/updateshh", {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Uid': user.uid,
+                    'token': user.refreshToken,
+                    'email':user.email,
                 },
                 body: JSON.stringify({ content, key: id, title })
             })
@@ -76,7 +85,14 @@ function Content({ data, id, title }) {
                     return res.json()
                 })
                 .then(data => {
-                    console.log("content update result", data)
+                    console.log("result", data.res)
+                    if (data.res) {
+                        setNotif("Lỗi: " + data.res)
+                        setColor("red")
+                    } else {
+                        setNotif("Cập nhật thành công")
+                        setColor("blue")
+                    }
                     // console.log(data)
                     // go back
                 })

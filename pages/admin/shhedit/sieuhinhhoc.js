@@ -9,6 +9,7 @@ function SieuHinhHoc({data, kind}) {
     const [title, setTitle] = useState(data.title);
     const [descr, setDescr] = useState(data.descr);
     const [order, setOrder] = useState(data.order);
+    let user = firebase.auth().currentUser || {}
     return (
     <div> Thêm/chỉnh sửa chủ đề
         <br/>
@@ -29,20 +30,24 @@ function SieuHinhHoc({data, kind}) {
             fetch("/api/send",{
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Uid': user.uid,
+                    'token': user.refreshToken,
+                    'email':user.email,
                   },
                 body: JSON.stringify({key: data.key,title,descr,order,kind})
             })
             .then(res => {
-                if (res.status == 400) {
-                    document.getElementById("notif").style.color = "red"
-                } else {
-                    document.getElementById("notif").style.color = "blue"
-                }
                 return res.json()
             })
             .then(res => {
-                document.getElementById("notif").innerHTML = res.result
+                if (res.result) {
+                    document.getElementById("notif").style.color = "red"
+                    document.getElementById("notif").innerHTML = res.result || "Thành công"
+                } else {
+                    document.getElementById("notif").style.color = "blue"
+                    document.getElementById("notif").innerHTML = res.result || "Thành công"
+                }
             })
         }}>Lưu</button>
     </div>)
