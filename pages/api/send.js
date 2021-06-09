@@ -1,7 +1,8 @@
 import { KingBed } from "@material-ui/icons"
 import firebase from "../../components/Backend/Firebase"
 import { startTime } from "../../myconfig"
-
+import {suser, spass} from "../../myconfig"
+ 
 
 export default async (req, res) => {
     let method = req.method
@@ -16,7 +17,6 @@ export default async (req, res) => {
     if (!body.title) {
         return res.status(400).json({ result: 'Lỗi: Tựa đề không có dữ liệu.' })
     }
-
 
     const pros = () => new Promise(async (resolve) => {
         firebase.auth().onAuthStateChanged(async function (user) {
@@ -74,7 +74,6 @@ export default async (req, res) => {
                 firebase.auth().signInWithEmailAndPassword(suser, spass)
             }
         })
-
     })
 
     let result = await pros()
