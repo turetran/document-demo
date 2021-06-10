@@ -45,6 +45,12 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
+    path: "/logic",
+    name: "Logic",
+    icon: Language,
+    layout: "/admin",
+  },
+  {
     path: "/shhedit",
     name: "Siêu hình học Edit",
     icon: BubbleChart,
